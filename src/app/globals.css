@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #f7faf8;
+  --foreground: #17201b;
+  --brand: #0fa958;
+  --brand-dark: #08773e;
+  --brand-soft: #eaf8f0;
+  --panel: #ffffff;
+  --line: #dfe8e2;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(15, 169, 88, 0.08), transparent 24rem),
+    var(--background);
+  color: var(--foreground);
+  font-family: "Prompt", system-ui, sans-serif;
+}
+button, input, select, textarea { font: inherit; }
+
+.card {
+  background: rgba(255,255,255,0.96);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  box-shadow: 0 18px 50px rgba(15, 75, 43, 0.08);
+}
+
+.focus-ring:focus-visible {
+  outline: 3px solid rgba(15, 169, 88, 0.25);
+  outline-offset: 2px;
+}

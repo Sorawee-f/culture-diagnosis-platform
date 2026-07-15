@@ -1,0 +1,4 @@
+employeeId,name,surname,nickname,email,BU,department,section,jobLevel,status
+8011,ณิชมน,ดวงใจ,มุก,nitchamon.d@example.com,TR,ทรัพยากรบุคคล,กลยุทธ์และพัฒนาองค์กร,Manager,active
+7628,ปริญญา,พินกฤษณ์,ฟิช,parinya.p@example.com,TR,ทรัพยากรบุคคล,กลยุทธ์และพัฒนาองค์กร,Senior Officer,active
+9001,ตัวอย่าง,พนักงาน,หนึ่ง,employee1@example.com,TVB,บรรณาธิการ,ข่าว,Officer,active
