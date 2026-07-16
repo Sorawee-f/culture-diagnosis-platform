@@ -68,17 +68,21 @@ export function SurveyForm({ employeeName }: { employeeName: string }) {
           <p className="mt-3 text-slate-600">{scenario.prompt}</p>
         </div>
 
+        <div className="mx-5 mt-5 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-900 md:mx-8">
+          ไม่มีคำตอบถูกหรือผิด กรุณาเลือก 1 คำตอบสำหรับสิ่งที่เกิดขึ้นจริงในปัจจุบัน และ 1 คำตอบสำหรับสิ่งที่อยากเห็นในอนาคต
+        </div>
+
         <div className="grid gap-7 p-5 md:grid-cols-2 md:p-8">
           <ChoicePanel
-            title="CURRENT CULTURE"
-            subtitle="สิ่งที่เกิดขึ้นจริงในปัจจุบัน"
+            title="สิ่งที่เป็นอยู่ในปัจจุบัน"
+            subtitle="จากประสบการณ์จริง วันนี้องค์กรมักทำแบบไหน"
             selected={current?.currentOptionId}
             options={scenario.options}
             onSelect={(id) => choose("current", id)}
           />
           <ChoicePanel
-            title="DESIRED CULTURE"
-            subtitle="สิ่งที่ควรเป็นในอนาคต"
+            title="อนาคตที่อยากเห็น"
+            subtitle="ในอนาคต คุณอยากให้องค์กรทำแบบไหน"
             selected={current?.desiredOptionId}
             options={scenario.options}
             onSelect={(id) => choose("desired", id)}
