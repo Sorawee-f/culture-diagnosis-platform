@@ -43,7 +43,7 @@ export function UserLoginForm() {
           value={employeeId}
           onChange={(e) => setEmployeeId(e.target.value.trim())}
           className="focus-ring w-full rounded-xl border border-slate-200 bg-white px-4 py-3"
-          placeholder="เช่น 8011"
+          placeholder="เช่น 007632"
         />
       </div>
       <div>
