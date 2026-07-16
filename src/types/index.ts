@@ -11,6 +11,7 @@ export type ScenarioOption = {
 
 export type Scenario = {
   id: string;
+  dimension: string;
   title: string;
   prompt: string;
   options: ScenarioOption[];
