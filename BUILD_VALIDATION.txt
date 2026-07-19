@@ -1,5 +1,15 @@
-Validation completed in the working container:
-- npm install: PASS
-- npm run lint: PASS
-- npm run build: PASS
-- Framework: Next.js 16.2.10 / React 19.2 / Tailwind CSS 4
+Culture Survey Pilot Platform v4.1
+Validation date: 2026-07-19
+
+npm run lint  : PASSED
+npm run build : PASSED
+
+Build used placeholder environment values for compile-time validation only.
+Participant flow:
+Login -> Survey 1 -> Survey 2 -> Survey Mode Test -> Completed
+
+Mobile-first checks in source:
+- Survey panels stack below md breakpoint
+- Mode A and Mode B stack below xl breakpoint
+- Touch choices use full-width buttons
+- Mobile navigation uses two-column controls with progress dots above

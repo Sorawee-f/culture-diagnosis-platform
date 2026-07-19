@@ -23,7 +23,7 @@ export function UserLoginForm() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message ?? "เข้าสู่ระบบไม่สำเร็จ");
-      router.push(data.alreadySubmitted ? "/already-submitted" : "/survey");
+      router.push("/pilot");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "เกิดข้อผิดพลาด");
@@ -43,7 +43,7 @@ export function UserLoginForm() {
           value={employeeId}
           onChange={(e) => setEmployeeId(e.target.value.trim())}
           className="focus-ring w-full rounded-xl border border-slate-200 bg-white px-4 py-3"
-          placeholder="เช่น 007632"
+          placeholder="กรอกรหัสพนักงาน"
         />
       </div>
       <div>
@@ -62,7 +62,7 @@ export function UserLoginForm() {
       {error && <div className="rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
       <button disabled={loading} className="focus-ring flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60">
         {loading ? <Loader2 className="animate-spin" size={20} /> : <LogIn size={20} />}
-        เข้าสู่แบบประเมิน
+        เข้าสู่ Culture Survey Pilot
       </button>
     </form>
   );

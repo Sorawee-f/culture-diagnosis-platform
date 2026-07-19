@@ -1,73 +1,63 @@
--- Culture Survey Pilot Platform schema (v4)
--- Fresh installation: run this entire file in Supabase SQL Editor.
+-- Upgrade an existing Culture Diagnosis prototype to Pilot Comparison v4.
+-- Run once in Supabase SQL Editor before deploying the new code.
 
-create extension if not exists pgcrypto;
+begin;
 
-create table if not exists public.employees (
-  employee_id text primary key,
-  name text,
-  surname text,
-  nickname text,
-  email text,
-  bu text,
-  department text,
-  section text,
-  job_level text,
-  status text not null default 'active' check (status in ('active','inactive')),
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
-);
+alter table public.participant_completions
+  add column if not exists survey_type text;
+update public.participant_completions
+  set survey_type = 'scenario'
+  where survey_type is null;
+alter table public.participant_completions
+  alter column survey_type set not null;
 
-create table if not exists public.login_events (
-  id uuid primary key default gen_random_uuid(),
-  actor_type text not null check (actor_type in ('employee','admin')),
-  employee_id text,
-  success boolean not null,
-  user_agent text,
-  created_at timestamptz not null default now()
-);
-create index if not exists login_events_created_at_idx on public.login_events(created_at desc);
-create index if not exists login_events_employee_id_idx on public.login_events(employee_id);
+alter table public.participant_completions
+  drop constraint if exists participant_completions_survey_type_check;
+alter table public.participant_completions
+  add constraint participant_completions_survey_type_check
+  check (survey_type in ('scenario','simple'));
 
--- Tracks participation only. Culture answers remain in survey_responses without employee_id.
-create table if not exists public.participant_completions (
-  employee_id text not null references public.employees(employee_id) on update cascade on delete restrict,
-  survey_version text not null,
-  survey_type text not null check (survey_type in ('scenario','simple')),
-  submitted_at timestamptz not null default now(),
-  primary key (employee_id, survey_version, survey_type)
-);
+alter table public.participant_completions
+  drop constraint if exists participant_completions_pkey;
+alter table public.participant_completions
+  add primary key (employee_id, survey_version, survey_type);
+
 create index if not exists participant_completions_version_idx
   on public.participant_completions(survey_version, survey_type, submitted_at desc);
 
--- Deliberately contains no employee_id. Demographic snapshots are stored for aggregate analysis.
-create table if not exists public.survey_responses (
-  id uuid primary key default gen_random_uuid(),
-  submission_code text not null unique default encode(gen_random_bytes(8), 'hex'),
-  survey_version text not null,
-  survey_type text not null check (survey_type in ('scenario','simple')),
-  survey_mode text not null default 'side_by_side' check (survey_mode in ('side_by_side','sequential')),
-  order_group text check (order_group in ('scenario_first','simple_first')),
-  duration_seconds integer check (duration_seconds is null or duration_seconds between 1 and 14400),
-  bu text,
-  department text,
-  section text,
-  job_level text,
-  answers jsonb not null,
-  current_scores jsonb not null,
-  desired_scores jsonb not null,
-  gaps jsonb not null,
-  current_top jsonb not null,
-  desired_top jsonb not null,
-  submitted_at timestamptz not null default now()
-);
+alter table public.survey_responses
+  add column if not exists survey_type text not null default 'scenario',
+  add column if not exists survey_mode text not null default 'side_by_side',
+  add column if not exists order_group text,
+  add column if not exists duration_seconds integer;
+
+alter table public.survey_responses
+  drop constraint if exists survey_responses_survey_type_check;
+alter table public.survey_responses
+  add constraint survey_responses_survey_type_check
+  check (survey_type in ('scenario','simple'));
+
+alter table public.survey_responses
+  drop constraint if exists survey_responses_survey_mode_check;
+alter table public.survey_responses
+  add constraint survey_responses_survey_mode_check
+  check (survey_mode in ('side_by_side','sequential'));
+
+alter table public.survey_responses
+  drop constraint if exists survey_responses_order_group_check;
+alter table public.survey_responses
+  add constraint survey_responses_order_group_check
+  check (order_group is null or order_group in ('scenario_first','simple_first'));
+
+alter table public.survey_responses
+  drop constraint if exists survey_responses_duration_seconds_check;
+alter table public.survey_responses
+  add constraint survey_responses_duration_seconds_check
+  check (duration_seconds is null or duration_seconds between 1 and 14400);
+
 create index if not exists survey_responses_version_type_idx
   on public.survey_responses(survey_version, survey_type, submitted_at desc);
-create index if not exists survey_responses_bu_idx on public.survey_responses(bu);
-create index if not exists survey_responses_department_idx on public.survey_responses(department);
 
--- UX feedback after each question set. This feedback may be tied to participation,
--- but does not contain the employee's culture answers.
 create table if not exists public.survey_experience_feedback (
   employee_id text not null references public.employees(employee_id) on update cascade on delete restrict,
   survey_version text not null,
@@ -81,10 +71,7 @@ create table if not exists public.survey_experience_feedback (
   submitted_at timestamptz not null default now(),
   primary key (employee_id, survey_version, survey_type)
 );
-create index if not exists survey_experience_feedback_version_idx
-  on public.survey_experience_feedback(survey_version, survey_type);
 
--- Final instrument preference and concept test for Side-by-Side vs Sequential.
 create table if not exists public.pilot_final_feedback (
   employee_id text not null references public.employees(employee_id) on update cascade on delete restrict,
   survey_version text not null,
@@ -97,18 +84,16 @@ create table if not exists public.pilot_final_feedback (
   submitted_at timestamptz not null default now(),
   primary key (employee_id, survey_version)
 );
-create index if not exists pilot_final_feedback_version_idx
-  on public.pilot_final_feedback(survey_version, submitted_at desc);
 
-alter table public.employees enable row level security;
-alter table public.login_events enable row level security;
-alter table public.participant_completions enable row level security;
-alter table public.survey_responses enable row level security;
 alter table public.survey_experience_feedback enable row level security;
 alter table public.pilot_final_feedback enable row level security;
 
--- No anon/authenticated policies are created. Browser clients cannot access tables directly.
--- All database access happens through trusted Next.js Route Handlers using the service role key.
+create index if not exists survey_experience_feedback_version_idx
+  on public.survey_experience_feedback(survey_version, survey_type);
+create index if not exists pilot_final_feedback_version_idx
+  on public.pilot_final_feedback(survey_version, submitted_at desc);
+
+drop function if exists public.submit_culture_survey(text,text,jsonb,jsonb,jsonb,jsonb,jsonb,jsonb);
 
 create or replace function public.submit_culture_survey(
   p_employee_id text,
@@ -179,3 +164,5 @@ $$;
 
 revoke all on function public.submit_culture_survey(text,text,text,text,text,integer,jsonb,jsonb,jsonb,jsonb,jsonb,jsonb) from public;
 grant execute on function public.submit_culture_survey(text,text,text,text,text,integer,jsonb,jsonb,jsonb,jsonb,jsonb,jsonb) to service_role;
+
+commit;
