@@ -109,7 +109,7 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     id: "S09",
     dimension: "บทบาทของผู้นำ",
     dimensionKey: "Leadership Role",
-    title: "เมื่อหัวหน้าช่วยทีมทำงานยาก",
+    title: "เมื่อหัวหน้าสนับสนุนทีม",
     prompt: "เมื่อลูกทีมเจองานที่ยากหรือท้าทาย องค์กรของเรามักเห็นหัวหน้าทำบทบาทใดมากที่สุด",
     options: [
       { id: "S09-A", label: "กำหนดขั้นตอนและมาตรฐาน พร้อมติดตามงานอย่างใกล้ชิด", archetype: "hierarchy" },
