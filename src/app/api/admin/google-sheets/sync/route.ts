@@ -96,12 +96,25 @@ export async function POST() {
     const text = await response.text();
     if (!response.ok) throw new Error(`Google Sheets HTTP ${response.status}: ${text.slice(0, 220)}`);
 
-    let result: { ok?: boolean; message?: string; participants?: number; responsesLong?: number; responsesWide?: number } | null = null;
+    let parsed: unknown;
     try {
-      result = JSON.parse(text);
+      parsed = JSON.parse(text);
     } catch {
       throw new Error(`Google Sheets ตอบกลับไม่ใช่ JSON กรุณาตรวจ Web App URL/สิทธิ์ Deploy: ${text.slice(0, 180)}`);
     }
+
+    if (typeof parsed !== "object" || parsed === null) {
+      throw new Error("Google Sheets ตอบกลับในรูปแบบที่ไม่ถูกต้อง");
+    }
+
+    const result = parsed as {
+      ok?: boolean;
+      message?: string;
+      participants?: number;
+      responsesLong?: number;
+      responsesWide?: number;
+    };
+
     if (result.ok !== true) throw new Error(result.message || "Google Sheets sync ไม่สำเร็จ");
 
     return NextResponse.json({
