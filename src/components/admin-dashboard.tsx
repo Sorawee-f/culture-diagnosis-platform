@@ -201,12 +201,13 @@ export function AdminDashboard() {
       const response = await fetch("/api/admin/dashboard");
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.message ?? "โหลดข้อมูลไม่สำเร็จ");
-      const rows = responseLongRows((payload as DashboardData).participants);
+      const dashboardData = payload as DashboardData;
+      const rows = responseLongRows(dashboardData.participants);
       if (!rows.length) {
         setSyncMessage("ยังไม่มีคำตอบสำหรับ Export");
         return;
       }
-      downloadCsv(rows, `culture-survey-all-responses-${data.surveyVersion}.csv`);
+      downloadCsv(rows, `culture-survey-all-responses-${dashboardData.surveyVersion}.csv`);
     } catch (cause) {
       setSyncMessage(cause instanceof Error ? cause.message : "Export ไม่สำเร็จ");
     }
