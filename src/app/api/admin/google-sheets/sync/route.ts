@@ -94,14 +94,21 @@ export async function POST() {
       cache: "no-store",
     });
     const text = await response.text();
-    if (!response.ok) throw new Error(`Google Sheets HTTP ${response.status}: ${text.slice(0, 180)}`);
-    let result: { ok?: boolean; message?: string } = {};
-    try { result = JSON.parse(text); } catch { /* Apps Script can return plain text on redirects/errors */ }
-    if (result.ok === false) throw new Error(result.message || "Google Sheets sync ไม่สำเร็จ");
+    if (!response.ok) throw new Error(`Google Sheets HTTP ${response.status}: ${text.slice(0, 220)}`);
+
+    let result: { ok?: boolean; message?: string; participants?: number; responsesLong?: number; responsesWide?: number } | null = null;
+    try {
+      result = JSON.parse(text);
+    } catch {
+      throw new Error(`Google Sheets ตอบกลับไม่ใช่ JSON กรุณาตรวจ Web App URL/สิทธิ์ Deploy: ${text.slice(0, 180)}`);
+    }
+    if (result.ok !== true) throw new Error(result.message || "Google Sheets sync ไม่สำเร็จ");
+
     return NextResponse.json({
       message: "Sync ไป Google Sheets สำเร็จ",
-      participants: payload.sheets.Participants.length,
-      responses: payload.sheets.Responses_Long.length,
+      participants: result.participants ?? payload.sheets.Participants.length,
+      responses: result.responsesLong ?? payload.sheets.Responses_Long.length,
+      responsesWide: result.responsesWide ?? payload.sheets.Responses_Wide.length,
       syncedAt: payload.syncedAt,
     });
   } catch (cause) {

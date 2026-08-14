@@ -1,86 +1,84 @@
-# ตั้งค่า Sync to Google Sheets — Culture Diagnosis v5.3
+# ตั้งค่า Sync to Google Sheets — Culture Diagnosis v5.5.2
 
-ระบบยังใช้ **Supabase เป็น Database หลัก** และใช้ Google Sheets เป็น Working / Analysis Layer สำหรับ HR
+Supabase ยังเป็น Database หลัก ส่วน Google Sheets เป็น Working / Analysis Layer สำหรับ HR
 
-เมื่อ Admin กด **Sync to Google Sheets** ระบบจะส่งข้อมูลล่าสุดจาก Supabase ไปเขียนทับ Google Sheet 3 แท็บ:
+เมื่อ Admin กด **Sync to Google Sheets** ระบบจะเขียนข้อมูลล่าสุดลง 4 แท็บ:
 
 - `Participants` — รายชื่อพนักงานและสถานะ Completed / Pending
-- `Responses_Long` — 1 แถวต่อพนักงานต่อคำถาม เหมาะกับ Pivot / BI / Analysis
-- `Responses_Wide` — 1 แถวต่อพนักงาน มี Current / Desired ของ S01–S12 เหมาะกับ Join กับ Engagement / Talent / Successor
-- `Sync_Meta` — Survey Version และเวลาที่ Sync ล่าสุด
+- `Responses_Long` — 1 แถวต่อพนักงานต่อคำถาม
+- `Responses_Wide` — 1 แถวต่อพนักงาน พร้อม Current / Desired ของ S01–S12
+- `Sync_Meta` — Version, เวลา Sync และจำนวนแถวที่ได้รับ
 
-> การ Sync เป็นแบบ **กด Manual จาก Admin** เพื่อควบคุมว่าเมื่อไรจะส่งข้อมูลเข้า Sheet และป้องกันการยิง Google Apps Script ทุกครั้งที่ User Submit
+## STEP 1 — สร้าง/เลือก Google Sheet กลาง
 
-## STEP 1 — สร้าง Google Sheet กลาง
+ตัวอย่างชื่อ `Culture Diagnosis - HR Data`
 
-สร้าง Google Sheet ใหม่ เช่น `Culture Diagnosis - HR Data`
+## STEP 2 — เปิด Apps Script จาก Google Sheet เป้าหมาย
 
-แนะนำให้ตั้งสิทธิ์ไฟล์ให้เฉพาะ HR/ผู้เกี่ยวข้องเท่านั้น
+ไปที่ `Extensions → Apps Script`
 
-## STEP 2 — เปิด Apps Script
+ลบโค้ดตัวอย่าง แล้ว Copy โค้ดจาก `scripts/google-sheets-sync.gs` ไปวางและ Save
 
-ใน Google Sheet:
+> ควรเปิด Apps Script ผ่าน Google Sheet เป้าหมาย ไม่ควรสร้างเป็น Standalone Script ที่ script.google.com
 
-`Extensions → Apps Script`
+## STEP 3 — ตั้ง SYNC_SECRET
 
-ลบโค้ดตัวอย่าง แล้ว Copy โค้ดจากไฟล์:
-
-`scripts/google-sheets-sync.gs`
-
-กด Save
-
-## STEP 3 — สร้าง Secret
-
-สร้างข้อความสุ่มยาวอย่างน้อย 16 ตัวอักษร เช่น 32–64 ตัวอักษร แล้วเก็บไว้ใช้ทั้ง Google Apps Script และ Vercel
-
-ใน Apps Script ไปที่:
-
-`Project Settings → Script Properties → Add script property`
-
-ตั้ง:
+Apps Script → `Project Settings → Script Properties → Add script property`
 
 - Property: `SYNC_SECRET`
-- Value: `<secret ที่สร้าง>`
+- Value: secret เดียวกับ Vercel `GOOGLE_SHEETS_SYNC_SECRET`
 
-## STEP 4 — Deploy Apps Script เป็น Web App
+## STEP 4 — ผูก Spreadsheet ID (สำคัญ)
 
-ไปที่:
+กลับหน้า Editor เลือก Function `setupSpreadsheetId` แล้วกด **Run** 1 ครั้ง และอนุญาตสิทธิ์
 
-`Deploy → New deployment → Select type: Web app`
+Script จะบันทึก `SPREADSHEET_ID` ของ Google Sheet นี้ไว้ใน Script Properties อัตโนมัติ
 
-ตั้ง:
+ตรวจที่ Project Settings แล้วควรเห็นทั้ง:
+
+- `SYNC_SECRET`
+- `SPREADSHEET_ID`
+
+## STEP 5 — Deploy เป็น Web App
+
+`Deploy → New deployment → Web app`
 
 - Execute as: `Me`
 - Who has access: `Anyone`
 
-กด Deploy และอนุญาตสิทธิ์ Google Sheet
+กด Deploy และ Copy URL ที่ลงท้ายด้วย `/exec`
 
-Copy **Web app URL** ที่ได้
+> ถ้าเคย Deploy แล้วและมีการแก้ Apps Script ให้ใช้ `Deploy → Manage deployments → Edit → New version → Deploy` เพื่อให้ Web App ใช้โค้ดล่าสุด
 
-## STEP 5 — เพิ่ม Environment Variables ใน Vercel
+## STEP 6 — Vercel Environment Variables
 
-Vercel → Project → Settings → Environment Variables
+ตั้ง:
 
-เพิ่ม:
+- `GOOGLE_SHEETS_WEBHOOK_URL=<Web App /exec URL>`
+- `GOOGLE_SHEETS_SYNC_SECRET=<ค่าเดียวกับ SYNC_SECRET>`
 
-`GOOGLE_SHEETS_WEBHOOK_URL=<Web app URL>`
+จากนั้น Redeploy Vercel
 
-`GOOGLE_SHEETS_SYNC_SECRET=<secret เดียวกับ Apps Script>`
+## STEP 7 — ตรวจ Web App ก่อน Sync
 
-ให้เปิดอย่างน้อย Production environment แล้ว Redeploy
+เปิด Web App `/exec` URL ใน Browser จะต้องเห็น JSON คล้าย:
 
-## STEP 6 — ทดสอบ
+`{"ok":true,"service":"Culture Diagnosis Google Sheets Sync","spreadsheetConfigured":true,"secretConfigured":true}`
 
-Admin Dashboard → ผู้ตอบรายบุคคล → `Sync to Google Sheets`
+ถ้า `spreadsheetConfigured:false` ให้กลับไปรัน `setupSpreadsheetId()`
 
-ถ้าสำเร็จ ระบบจะแสดงจำนวนพนักงานและจำนวนแถวคำตอบที่ Sync และ Google Sheet จะมีแท็บ Participants / Responses_Long / Responses_Wide / Sync_Meta
+## STEP 8 — ทดสอบจาก Admin
 
-## Export CSV
+Admin Dashboard → `Sync to Google Sheets`
 
-ในหน้า Admin มี:
+ถ้าสำเร็จจะขึ้นจำนวนคนและจำนวนแถวคำตอบ และ Google Sheet จะมีแท็บทั้ง 4
 
-- `Export All Responses (.csv)` — ดึงคำตอบทั้งหมดของ Survey Version ปัจจุบัน ไม่ขึ้นกับ BU/Department filter ที่กำลังเลือกอยู่
-- `Export Individual Response` — อยู่ในหน้าต่างคำตอบรายบุคคล
-- `Export Status` — Export รายชื่อที่กำลัง Filter พร้อมสถานะ Completed/Pending
+### ถ้าขึ้น Sync สำเร็จแต่ Responses_Long เป็น 0
 
-CSV เป็น UTF-8 with BOM เพื่อให้ภาษาไทยเปิดใน Excel ได้ถูกต้อง
+ตรวจว่า:
+
+1. Vercel `SURVEY_VERSION` ตรงกับข้อมูลที่เพิ่งตอบ เช่น `2026-culture-v1`
+2. `survey_responses.employee_id` ของคำตอบใหม่ไม่เป็น NULL
+3. เคย Run `supabase/migrate-to-single-survey-v5.sql` ก่อนรับคำตอบชุดใหม่แล้ว
+
+ข้อมูล Pilot เก่าที่สร้างก่อน migration อาจไม่มี `employee_id` และจะไม่สามารถจับคู่เป็นรายบุคคลใน Export/Sync แบบใหม่ได้โดยอัตโนมัติ

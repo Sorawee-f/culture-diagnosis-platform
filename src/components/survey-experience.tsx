@@ -37,7 +37,7 @@ function SurveyIntroModal({ onAccept }: { onAccept: () => void }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="survey-intro-title"
-        className="max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-2xl"
+        className="flex max-h-[calc(100dvh-2rem)] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
       >
         <div className="border-b border-slate-100 bg-gradient-to-r from-emerald-700 to-emerald-500 p-6 text-white sm:p-8">
           <div className="text-sm font-semibold text-emerald-100">ก่อนเริ่มแบบประเมิน</div>
@@ -46,7 +46,7 @@ function SurveyIntroModal({ onAccept }: { onAccept: () => void }) {
           </h1>
         </div>
 
-        <div className="max-h-[calc(90vh-190px)] space-y-6 overflow-y-auto p-5 text-[15px] leading-7 text-slate-700 sm:p-8">
+        <div className="min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain p-5 text-[15px] leading-7 text-slate-700 sm:p-8">
           <div className="space-y-3">
             <p>
               แบบประเมินนี้ต้องการสำรวจวิธีการทำงานที่ <strong>“เกิดขึ้นจริง”</strong> ในฝ่ายของคุณ และวิธีการทำงานที่คุณ <strong>“อยากเห็น”</strong> ในอนาคต เพื่อให้เข้าใจรูปแบบการทำงานและวัฒนธรรมการทำงานขององค์กรในปัจจุบัน และนำไปใช้เป็นข้อมูลในการกำหนดแนวทางการพัฒนาองค์กรในอนาคต
@@ -101,7 +101,7 @@ function SurveyIntroModal({ onAccept }: { onAccept: () => void }) {
           </div>
         </div>
 
-        <div className="border-t border-slate-100 bg-white p-4 sm:p-5">
+        <div className="shrink-0 border-t border-slate-100 bg-white p-4 sm:p-5">
           <button
             type="button"
             onClick={onAccept}
