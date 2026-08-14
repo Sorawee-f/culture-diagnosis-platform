@@ -1,10 +1,9 @@
 import { BrandHeader } from "@/components/brand-header";
 import { UserLoginForm } from "@/components/user-login-form";
-import { BarChart3, Layers3, ShieldCheck } from "lucide-react";
+import { BarChart3, CheckCircle2, Smartphone } from "lucide-react";
 
 export default function HomePage() {
-  const title =
-    process.env.NEXT_PUBLIC_SURVEY_TITLE ?? "Culture Survey Pilot";
+  const title = process.env.NEXT_PUBLIC_SURVEY_TITLE ?? "Culture Diagnosis Survey";
 
   return (
     <main className="min-h-screen px-5 py-8 md:py-14">
@@ -13,50 +12,45 @@ export default function HomePage() {
           <BrandHeader />
           <div>
             <div className="mb-3 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-800">
-              Instrument Selection Pilot
+              Culture Diagnosis
             </div>
             <h1 className="max-w-3xl text-4xl font-bold leading-tight text-slate-950 md:text-6xl">
               {title}
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
-              ทดลองแบบสำรวจวัฒนธรรมองค์กร 2 รูปแบบ เพื่อหาจุดสมดุลระหว่างคุณภาพของข้อมูลกับความง่ายในการตอบ ก่อนเลือกชุดสุดท้ายสำหรับใช้จริง
+              สำรวจวิธีการทำงานที่เกิดขึ้นจริงในฝ่ายของคุณ และวิธีการทำงานที่คุณอยากเห็นในอนาคต ผ่านสถานการณ์การทำงาน 12 ข้อ
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              [Layers3, "2 ชุดคำถาม", "Scenario-Based และแบบคำถามอย่างง่าย"],
-              [ShieldCheck, "ตอบครบทั้งสองชุด", "ระบบจัดลำดับให้อัตโนมัติ"],
-              [BarChart3, "เปรียบเทียบผล", "Culture Profile, เวลา และความแตกต่าง"],
+              [CheckCircle2, "12 สถานการณ์", "ตอบทั้ง Current และ Desired ในแต่ละข้อ"],
+              [Smartphone, "รองรับมือถือ", "ออกแบบให้ตอบได้สะดวกทั้งมือถือและคอมพิวเตอร์"],
+              [BarChart3, "สรุปผลหลังตอบ", "ดูภาพรวม Culture Profile จากคำตอบของคุณ"],
             ].map(([Icon, titleText, detail]) => {
-              const I = Icon as typeof Layers3;
+              const I = Icon as typeof CheckCircle2;
               return (
                 <div key={String(titleText)} className="card p-4">
                   <I className="mb-3 text-emerald-600" />
                   <div className="font-semibold">{String(titleText)}</div>
-                  <div className="mt-1 text-sm text-slate-500">
-                    {String(detail)}
-                  </div>
+                  <div className="mt-1 text-sm text-slate-500">{String(detail)}</div>
                 </div>
               );
             })}
           </div>
           <p className="text-sm leading-6 text-slate-500">
-            รหัสพนักงานใช้ตรวจสอบสิทธิ์ ติดตามการทำครบ และจัดลำดับ Pilot เท่านั้น คำตอบ Culture จัดเก็บแยกจากรหัสพนักงาน
+            ข้อมูลใช้เพื่อการวิเคราะห์และวางแผนภายในองค์กร โดยผู้ดูแลระบบที่ได้รับสิทธิ์สามารถตรวจสอบสถานะและคำตอบรายบุคคลได้
           </p>
         </section>
 
         <section className="card p-6 md:p-8">
           <h2 className="text-2xl font-semibold">เข้าสู่ระบบพนักงาน</h2>
           <p className="mb-7 mt-2 text-sm text-slate-500">
-            ใช้รหัสพนักงานเพื่อยืนยันสิทธิ์ก่อนเริ่ม Pilot
+            ใช้รหัสพนักงานเพื่อยืนยันสิทธิ์ก่อนเริ่มแบบประเมิน
           </p>
           <UserLoginForm />
           <div className="mt-6 border-t border-slate-100 pt-5 text-center text-sm text-slate-500">
             ผู้ดูแลระบบ{" "}
-            <a
-              href="/admin"
-              className="font-medium text-emerald-700 hover:underline"
-            >
+            <a href="/admin" className="font-medium text-emerald-700 hover:underline">
               เข้าสู่ Admin Dashboard
             </a>
           </div>

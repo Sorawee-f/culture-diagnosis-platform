@@ -15,7 +15,7 @@ const answerSchema = z.object({
 });
 
 const schema = z.object({
-  surveyType: z.enum(["scenario", "simple"]),
+  surveyType: z.literal("scenario"),
   surveyMode: z.enum(["side_by_side", "sequential"]).default("side_by_side"),
   durationSeconds: z.number().int().min(1).max(14400),
   answers: z.array(answerSchema),
@@ -97,5 +97,5 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({ ok: true, receipt: data });
+  return NextResponse.json({ ok: true, receipt: data, summary });
 }

@@ -31,7 +31,21 @@ export function SurveyForm({
 
   useEffect(() => {
     startedAt.current = Date.now();
-  }, []);
+    const saved = sessionStorage.getItem(`culture-survey-draft-${surveyType}`);
+    if (saved) {
+      try {
+        setAnswers(JSON.parse(saved));
+      } catch {
+        sessionStorage.removeItem(`culture-survey-draft-${surveyType}`);
+      }
+    }
+  }, [surveyType]);
+
+  useEffect(() => {
+    if (Object.keys(answers).length) {
+      sessionStorage.setItem(`culture-survey-draft-${surveyType}`, JSON.stringify(answers));
+    }
+  }, [answers, surveyType]);
 
   const question = questions[index];
   const answer = answers[question.id];
@@ -95,7 +109,9 @@ export function SurveyForm({
       if (!response.ok) {
         throw new Error(data.message ?? "ส่งแบบสำรวจไม่สำเร็จ");
       }
-      router.push("/pilot");
+      sessionStorage.setItem("culture-survey-result", JSON.stringify(data.summary));
+      sessionStorage.removeItem(`culture-survey-draft-${surveyType}`);
+      router.push("/result");
       router.refresh();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "เกิดข้อผิดพลาด");
@@ -108,10 +124,10 @@ export function SurveyForm({
     <div className="mx-auto max-w-6xl">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="text-sm text-slate-500">ผู้ทดลอง</div>
+          <div className="text-sm text-slate-500">ผู้ทำแบบประเมิน</div>
           <div className="text-xl font-semibold">{employeeName}</div>
           <div className="mt-2 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
-            {definition.name}
+            Culture Diagnosis Survey
           </div>
         </div>
         <div className="w-full text-left sm:w-auto sm:min-w-56 sm:text-right">
@@ -155,7 +171,7 @@ export function SurveyForm({
             step="1"
             tone="current"
             title="สิ่งที่เป็นอยู่ในปัจจุบัน"
-            subtitle="จากประสบการณ์จริง วันนี้องค์กรมักทำแบบไหน"
+            subtitle="จากประสบการณ์จริง วันนี้ฝ่ายของคุณมักเป็นแบบไหน"
             selected={answer?.currentOptionId}
             options={question.options}
             onSelect={(id) => choose("current", id)}
@@ -169,7 +185,7 @@ export function SurveyForm({
               step="2"
               tone="desired"
               title="อนาคตที่อยากเห็น"
-              subtitle="ในอนาคต คุณอยากให้องค์กรทำแบบไหน"
+              subtitle="ในอนาคต คุณอยากให้ฝ่ายของคุณเป็นแบบไหน"
               selected={answer?.desiredOptionId}
               options={question.options}
               onSelect={(id) => choose("desired", id)}
@@ -258,7 +274,7 @@ export function SurveyForm({
               ) : (
                 <Send size={18} />
               )}{" "}
-              ส่งชุดคำถามนี้
+              ส่งแบบประเมิน
             </button>
           )}
         </div>

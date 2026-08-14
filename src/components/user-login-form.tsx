@@ -23,7 +23,8 @@ export function UserLoginForm() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message ?? "เข้าสู่ระบบไม่สำเร็จ");
-      router.push("/pilot");
+      sessionStorage.removeItem("culture-survey-intro-accepted");
+      router.push("/survey");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "เกิดข้อผิดพลาด");
@@ -62,7 +63,7 @@ export function UserLoginForm() {
       {error && <div className="rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
       <button disabled={loading} className="focus-ring flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60">
         {loading ? <Loader2 className="animate-spin" size={20} /> : <LogIn size={20} />}
-        เข้าสู่ Culture Survey Pilot
+        เข้าสู่ Culture Survey
       </button>
     </form>
   );

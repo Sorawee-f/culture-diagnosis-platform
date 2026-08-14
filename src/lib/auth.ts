@@ -8,7 +8,7 @@ const key = encoder.encode(env.SESSION_SECRET);
 const USER_COOKIE = "culture_user_session";
 const ADMIN_COOKIE = "culture_admin_session";
 
-async function sign(payload: EmployeeSession | AdminSession, expiresIn = "8h") {
+async function sign(payload: EmployeeSession | AdminSession, expiresIn = "12h") {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -33,7 +33,7 @@ export async function setEmployeeSession(session: EmployeeSession) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 8,
+    maxAge: 60 * 60 * 12,
   });
 }
 
