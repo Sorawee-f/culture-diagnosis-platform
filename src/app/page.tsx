@@ -25,7 +25,7 @@ export default function HomePage() {
             {[
               [CheckCircle2, "12 สถานการณ์", "ตอบทั้ง Current และ Desired ในแต่ละข้อ"],
               [Smartphone, "รองรับมือถือ", "ออกแบบให้ตอบได้สะดวกทั้งมือถือและคอมพิวเตอร์"],
-              [BarChart3, "สรุปผลหลังตอบ", "ดูภาพรวม Culture Profile จากคำตอบของคุณ"],
+              [BarChart3, "สรุปผลหลังตอบ", "ดูรูปแบบ Current และ Desired ที่เด่นที่สุดจากคำตอบของคุณ"],
             ].map(([Icon, titleText, detail]) => {
               const I = Icon as typeof CheckCircle2;
               return (
@@ -37,9 +37,6 @@ export default function HomePage() {
               );
             })}
           </div>
-          <p className="text-sm leading-6 text-slate-500">
-            ข้อมูลใช้เพื่อการวิเคราะห์และวางแผนภายในองค์กร โดยผู้ดูแลระบบที่ได้รับสิทธิ์สามารถตรวจสอบสถานะและคำตอบรายบุคคลได้
-          </p>
         </section>
 
         <section className="card p-6 md:p-8">

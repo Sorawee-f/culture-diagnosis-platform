@@ -8,6 +8,8 @@ const schema = z.object({
   ADMIN_PASSWORD_HASH: z.string().min(20),
   SURVEY_VERSION: z.string().default("2026-culture-v1"),
   MIN_GROUP_SIZE: z.coerce.number().int().min(1).default(7),
+  GOOGLE_SHEETS_WEBHOOK_URL: z.string().url().optional(),
+  GOOGLE_SHEETS_SYNC_SECRET: z.string().min(16).optional(),
   PROTOTYPE_MODE: z
     .enum(["true", "false"])
     .default("false")
@@ -22,6 +24,8 @@ export const env = schema.parse({
   ADMIN_PASSWORD_HASH: process.env.ADMIN_PASSWORD_HASH,
   SURVEY_VERSION: process.env.SURVEY_VERSION ?? "2026-culture-v1",
   MIN_GROUP_SIZE: process.env.MIN_GROUP_SIZE ?? "7",
+  GOOGLE_SHEETS_WEBHOOK_URL: process.env.GOOGLE_SHEETS_WEBHOOK_URL || undefined,
+  GOOGLE_SHEETS_SYNC_SECRET: process.env.GOOGLE_SHEETS_SYNC_SECRET || undefined,
   PROTOTYPE_MODE: process.env.PROTOTYPE_MODE ?? "false",
 });
 

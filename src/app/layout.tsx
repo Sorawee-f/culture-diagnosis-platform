@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Culture Survey Pilot Platform",
-  description: "Compare scenario-based and simplified culture surveys",
+  title: "Thairath Group Culture Diagnosis",
+  description: "Culture Diagnosis Survey for Thairath Group",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

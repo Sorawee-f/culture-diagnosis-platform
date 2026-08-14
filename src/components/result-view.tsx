@@ -3,11 +3,17 @@
 import Link from "next/link";
 import { useMemo, useSyncExternalStore } from "react";
 import { ARCHETYPE_META } from "@/data/archetypes";
-import { ARCHETYPES, type SurveySummary } from "@/types";
-import { SCENARIO_QUESTIONS } from "@/data/surveys";
+import type { Archetype, SurveySummary } from "@/types";
 import { CheckCircle2, Home } from "lucide-react";
 
 const subscribe = () => () => undefined;
+
+const RESULT_DESCRIPTION: Record<Archetype, string> = {
+  clan: "เน้นความร่วมมือ ความไว้ใจ การช่วยเหลือกัน และความเป็นทีม",
+  adhocracy: "เน้นความคล่องตัว การทดลองสิ่งใหม่ การเรียนรู้ และการปรับตัวอย่างรวดเร็ว",
+  market: "เน้นเป้าหมาย ผลลัพธ์ ความรับผิดชอบ และการตอบโจทย์ธุรกิจหรือลูกค้า",
+  hierarchy: "เน้นบทบาทที่ชัดเจน ขั้นตอน มาตรฐาน และความสม่ำเสมอในการทำงาน",
+};
 
 export function ResultView({ initialSummary = null }: { initialSummary?: SurveySummary | null }) {
   const raw = useSyncExternalStore(
@@ -31,61 +37,72 @@ export function ResultView({ initialSummary = null }: { initialSummary?: SurveyS
       <div className="card p-7 text-center md:p-10">
         <CheckCircle2 className="mx-auto text-emerald-600" size={56} />
         <h1 className="mt-4 text-3xl font-bold">ส่งแบบประเมินเรียบร้อยแล้ว</h1>
-        <p className="mt-2 text-slate-500">ขอบคุณที่ช่วยสะท้อนวิธีการทำงานที่เกิดขึ้นจริง และวิธีการทำงานที่อยากเห็นในอนาคต</p>
+        <p className="mt-2 text-slate-500">สรุปภาพที่เด่นที่สุดจากคำตอบของคุณ</p>
       </div>
-      <div className="grid gap-6 lg:grid-cols-2">
-        <ProfileCard title="CURRENT CULTURE" subtitle="โปรไฟล์หลักที่คุณรับรู้ในปัจจุบัน" scores={summary.currentScores} top={summary.currentTop} />
-        <ProfileCard title="DESIRED CULTURE" subtitle="โปรไฟล์หลักที่คุณอยากเห็นในอนาคต" scores={summary.desiredScores} top={summary.desiredTop} />
+
+      <div className="grid gap-5 lg:grid-cols-2">
+        <TopResultCard
+          label="CURRENT — ปัจจุบัน"
+          sentence="ปัจจุบันคุณมองฝ่ายของคุณเป็น"
+          top={summary.currentTop}
+          tone="current"
+        />
+        <TopResultCard
+          label="DESIRED — ความคาดหวัง"
+          sentence="สิ่งที่คุณอยากเห็นในอนาคตคือ"
+          top={summary.desiredTop}
+          tone="desired"
+        />
       </div>
-      <div className="card p-6">
-        <h2 className="text-xl font-semibold">Current–Desired Gap จากคำตอบของคุณ</h2>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {ARCHETYPES.map((key) => (
-            <div key={key} className="rounded-xl bg-slate-50 p-4">
-              <div className="font-medium">{ARCHETYPE_META[key].label}</div>
-              <div className={`mt-2 text-2xl font-bold ${summary.gaps[key] > 0 ? "text-emerald-600" : summary.gaps[key] < 0 ? "text-rose-600" : "text-slate-500"}`}>
-                {summary.gaps[key] > 0 ? "+" : ""}{summary.gaps[key]}
-              </div>
-              <div className="text-xs text-slate-500">Desired - Current</div>
-            </div>
-          ))}
-        </div>
+
+      <div className="card p-6 text-center md:p-8">
+        <p className="text-lg font-semibold text-slate-900">ขอบคุณสำหรับการตอบแบบสำรวจ</p>
+        <p className="mt-2 text-sm leading-6 text-slate-500">
+          คำตอบของคุณจะถูกนำไปรวมกับข้อมูลส่วนอื่นเพื่อใช้ประกอบการพัฒนาองค์กรต่อไป
+        </p>
       </div>
+
       <Link href="/" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-medium">
         <Home size={18} /> กลับหน้าแรก
       </Link>
-      <p className="text-xs leading-5 text-slate-500">ผลนี้เป็นภาพสะท้อนจากคำตอบในแบบประเมิน ไม่ใช่การประเมินบุคลิกภาพ ความสามารถ หรือศักยภาพของพนักงาน และควรใช้ร่วมกับข้อมูลระดับฝ่าย/องค์กรในการวิเคราะห์ต่อไป</p>
     </div>
   );
 }
 
-function ProfileCard({ title, subtitle, scores, top }: {
-  title: string;
-  subtitle: string;
-  scores: SurveySummary["currentScores"];
-  top: SurveySummary["currentTop"];
+function TopResultCard({
+  label,
+  sentence,
+  top,
+  tone,
+}: {
+  label: string;
+  sentence: string;
+  top: Archetype[];
+  tone: "current" | "desired";
 }) {
+  const shell = tone === "current"
+    ? "border-blue-200 bg-blue-50/50"
+    : "border-emerald-200 bg-emerald-50/50";
+  const labelClass = tone === "current" ? "text-blue-700" : "text-emerald-700";
+
   return (
-    <div className="card p-6">
-      <div className="text-sm font-semibold text-emerald-700">{title}</div>
-      <h2 className="mt-1 text-2xl font-bold">{top.map((key) => ARCHETYPE_META[key].label).join(" + ")}</h2>
-      <p className="text-sm text-slate-500">{subtitle}</p>
-      <div className="mt-6 space-y-4">
-        {ARCHETYPES.map((key) => {
-          const pct = Math.round((scores[key] / SCENARIO_QUESTIONS.length) * 100);
-          return (
-            <div key={key}>
-              <div className="mb-1 flex justify-between text-sm">
-                <span>{ARCHETYPE_META[key].label} — {ARCHETYPE_META[key].thai}</span>
-                <span className="font-semibold">{pct}%</span>
-              </div>
-              <div className="h-2 rounded-full bg-slate-100">
-                <div className="h-full rounded-full bg-emerald-600" style={{ width: `${pct}%` }} />
-              </div>
+    <div className={`rounded-2xl border p-6 md:p-7 ${shell}`}>
+      <div className={`text-sm font-semibold ${labelClass}`}>{label}</div>
+      <p className="mt-3 text-base text-slate-600">{sentence}</p>
+      <div className="mt-3 space-y-4">
+        {top.map((key) => (
+          <div key={key}>
+            <div className="text-2xl font-bold text-slate-950">
+              {ARCHETYPE_META[key].label}
+              <span className="ml-2 text-base font-medium text-slate-600">— {ARCHETYPE_META[key].thai}</span>
             </div>
-          );
-        })}
+            <p className="mt-2 leading-7 text-slate-700">หมายถึง {RESULT_DESCRIPTION[key]}</p>
+          </div>
+        ))}
       </div>
+      {top.length > 1 && (
+        <p className="mt-4 text-xs leading-5 text-slate-500">คะแนนสูงสุดเท่ากัน จึงแสดงมากกว่าหนึ่งรูปแบบ</p>
+      )}
     </div>
   );
 }

@@ -1,11 +1,17 @@
-import { Lightbulb } from "lucide-react";
+import Image from "next/image";
 
 export function BrandHeader({ eyebrow }: { eyebrow?: string }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-600 text-white shadow-lg shadow-emerald-200">
-        <Lightbulb size={24} />
-      </div>
+    <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+      <Image
+        src="/thairath-group-logo.png"
+        alt="Thairath Group"
+        width={782}
+        height={316}
+        priority
+        className="h-auto w-[150px] sm:w-[180px]"
+      />
+      <div className="hidden h-10 w-px bg-slate-200 sm:block" />
       <div>
         <div className="font-semibold text-emerald-700">{eyebrow ?? "CULTURE DIAGNOSIS"}</div>
         <div className="text-sm text-slate-500">Reality vs Expectation Survey</div>

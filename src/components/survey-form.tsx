@@ -145,25 +145,21 @@ export function SurveyForm({
 
       <section className="card overflow-hidden">
         <div className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 to-white p-6 md:p-8">
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="text-sm font-medium text-emerald-700">
-              {definition.itemLabel} {index + 1} จาก {questions.length}
-            </div>
-            <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-sm">
-              {question.dimension}
-            </span>
+          <div className="text-sm font-semibold text-emerald-700">
+            ข้อ {index + 1} จาก {questions.length}
           </div>
-          <h1 className="mt-3 text-2xl font-bold md:text-3xl">
-            {question.title}
-          </h1>
-          <p className="mt-3 max-w-4xl text-base leading-7 text-slate-600">
+          <div className="mt-3 text-sm font-medium text-slate-500">สถานการณ์: {question.title}</div>
+          <div className="mt-4 inline-flex rounded-lg bg-slate-900 px-3 py-1 text-xs font-semibold tracking-wide text-white">
+            คำถาม
+          </div>
+          <h1 className="mt-3 max-w-4xl text-xl font-bold leading-8 text-slate-950 md:text-2xl md:leading-9">
             {question.prompt}
-          </p>
+          </h1>
         </div>
 
         <div className="mx-5 mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950 md:mx-8">
-          <span className="font-semibold">แต่ละข้อต้องตอบ 2 มุมมอง:</span>{" "}
-          เลือกหนึ่งคำตอบสำหรับสิ่งที่เกิดขึ้นจริงในปัจจุบัน และอีกหนึ่งคำตอบสำหรับสิ่งที่อยากเห็นในอนาคต
+          <span className="font-semibold">ตอบให้ครบ 2 มุมมอง:</span>{" "}
+          เลือก 1 คำตอบสำหรับ Current และ 1 คำตอบสำหรับ Desired
         </div>
 
         <div className="grid gap-6 p-5 md:grid-cols-2 md:gap-0 md:p-8">

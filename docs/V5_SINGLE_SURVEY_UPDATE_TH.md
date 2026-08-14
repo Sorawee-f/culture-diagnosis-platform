@@ -46,3 +46,12 @@ Flow ผู้ใช้งานทั่วไปค่อนข้างเบ
 - Result: query response ของผู้ใช้ 1 รายการ
 
 จึงเหมาะกับการเปิดใช้พร้อมกันระดับหลักร้อยโดยสถาปัตยกรรมปัจจุบัน แต่ความจุจริงขึ้นอยู่กับ Vercel/Supabase plan, connection limits และ traffic ณ เวลาจริง ควรทำ load test ก่อนเปิดทั้งองค์กรหากคาดว่าหลายร้อยถึงหลักพันคนจะกดส่งในช่วงเวลาเดียวกัน
+
+## v5.3 Data Export & Google Sheets
+
+เพิ่ม Admin tools:
+- Export All Responses (.csv)
+- Export Individual Response (.csv)
+- Sync to Google Sheets แบบ Manual
+
+ดูขั้นตอนตั้งค่าใน `docs/GOOGLE_SHEETS_SYNC_SETUP_TH.md`

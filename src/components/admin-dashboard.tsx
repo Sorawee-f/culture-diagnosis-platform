@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   Clock3,
   Download,
+  FileSpreadsheet,
   Eye,
   Loader2,
   RefreshCw,
@@ -28,6 +29,7 @@ import {
 import { ARCHETYPE_META } from "@/data/archetypes";
 import { SCENARIO_QUESTIONS } from "@/data/surveys";
 import { ARCHETYPES, type Archetype, type Scores, type SurveyAnswer } from "@/types";
+import { responseLongRows } from "@/lib/export-data";
 
 type RankedArchetype = { key: Archetype; value: number; rank: number };
 type DimensionResult = {
@@ -100,6 +102,8 @@ export function AdminDashboard() {
   const [importing, setImporting] = useState(false);
   const [importMessage, setImportMessage] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+  const [syncingSheets, setSyncingSheets] = useState(false);
+  const [syncMessage, setSyncMessage] = useState("");
 
   useEffect(() => {
     let ignore = false;
@@ -190,6 +194,37 @@ export function AdminDashboard() {
       durationSeconds: p.duration_seconds ?? "",
     }));
     downloadCsv(rows, "culture-survey-participants.csv");
+  }
+
+  async function exportAllResponses() {
+    try {
+      const response = await fetch("/api/admin/dashboard");
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.message ?? "โหลดข้อมูลไม่สำเร็จ");
+      const rows = responseLongRows((payload as DashboardData).participants);
+      if (!rows.length) {
+        setSyncMessage("ยังไม่มีคำตอบสำหรับ Export");
+        return;
+      }
+      downloadCsv(rows, `culture-survey-all-responses-${data.surveyVersion}.csv`);
+    } catch (cause) {
+      setSyncMessage(cause instanceof Error ? cause.message : "Export ไม่สำเร็จ");
+    }
+  }
+
+  async function syncToGoogleSheets() {
+    setSyncingSheets(true);
+    setSyncMessage("");
+    try {
+      const response = await fetch("/api/admin/google-sheets/sync", { method: "POST" });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.message ?? "Sync ไม่สำเร็จ");
+      setSyncMessage(`${payload.message} · ${payload.participants} คน · ${payload.responses} แถวคำตอบ`);
+    } catch (cause) {
+      setSyncMessage(cause instanceof Error ? cause.message : "Sync ไม่สำเร็จ");
+    } finally {
+      setSyncingSheets(false);
+    }
   }
 
   if (loading && !data) {
@@ -299,11 +334,29 @@ export function AdminDashboard() {
                 <option value="pending">ยังไม่ทำ</option>
               </select>
               <button onClick={exportParticipants} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3 font-semibold">
-                <Download size={18} /> Export
+                <Download size={18} /> Export Status
               </button>
             </div>
           </div>
 
+
+          <div className="card p-5">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-semibold">Data Export & Google Sheets</h2>
+                <p className="mt-1 text-sm text-slate-500">Export คำตอบทั้งหมดเพื่อวิเคราะห์ต่อ หรือ Sync ข้อมูลล่าสุดจาก Supabase ไปยัง Google Sheets กลางของ HR</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button onClick={exportAllResponses} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 font-semibold hover:bg-slate-50">
+                  <Download size={18} /> Export All Responses (.csv)
+                </button>
+                <button onClick={syncToGoogleSheets} disabled={syncingSheets} className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white disabled:opacity-50">
+                  {syncingSheets ? <Loader2 className="animate-spin" size={18} /> : <FileSpreadsheet size={18} />} Sync to Google Sheets
+                </button>
+              </div>
+            </div>
+            {syncMessage && <div className="mt-4 rounded-xl bg-slate-50 p-3 text-sm text-slate-700">{syncMessage}</div>}
+          </div>
           <div className="card overflow-hidden">
             <div className="overflow-auto">
               <table className="w-full min-w-[900px] text-sm">
@@ -361,7 +414,7 @@ export function AdminDashboard() {
         </div>
       )}
 
-      {selected && <IndividualResponseModal participant={selected} onClose={() => setSelected(null)} />}
+      {selected && <IndividualResponseModal participant={selected} surveyVersion={data.surveyVersion} onClose={() => setSelected(null)} />}
     </div>
   );
 }
@@ -410,7 +463,7 @@ function ResultsTab({ aggregate }: { aggregate: SurveyAggregate }) {
   );
 }
 
-function IndividualResponseModal({ participant, onClose }: { participant: Participant; onClose: () => void }) {
+function IndividualResponseModal({ participant, surveyVersion, onClose }: { participant: Participant; surveyVersion: string; onClose: () => void }) {
   const answers = new Map((participant.answers ?? []).map((answer) => [answer.questionId, answer]));
   return (
     <div className="fixed inset-0 z-50 bg-slate-950/55 p-4 backdrop-blur-sm">
@@ -421,7 +474,15 @@ function IndividualResponseModal({ participant, onClose }: { participant: Partic
             <h2 className="mt-1 text-2xl font-bold">{[participant.name, participant.surname].filter(Boolean).join(" ") || participant.employee_id}</h2>
             <p className="mt-1 text-sm text-slate-500">{participant.employee_id} · {[participant.bu, participant.department, participant.job_level].filter(Boolean).join(" / ")}</p>
           </div>
-          <button onClick={onClose} className="rounded-xl border border-slate-200 p-2"><X size={20} /></button>
+          <div className="flex items-center gap-2">
+            <button onClick={() => {
+              const rows = responseLongRows([participant]);
+              downloadCsv(rows, `culture-response-${participant.employee_id}-${surveyVersion}.csv`);
+            }} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold">
+              <Download size={17} /> Export Individual Response
+            </button>
+            <button onClick={onClose} className="rounded-xl border border-slate-200 p-2"><X size={20} /></button>
+          </div>
         </div>
 
         <div className="overflow-y-auto p-5 sm:p-6">
