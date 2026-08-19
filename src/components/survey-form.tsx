@@ -159,7 +159,7 @@ export function SurveyForm({
 
         <div className="mx-5 mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950 md:mx-8">
           <span className="font-semibold">ตอบให้ครบ 2 มุมมอง:</span>{" "}
-          เลือก 1 คำตอบสำหรับ สิ่งที่เป็นอยู่ในปัจจุบัน และ 1 คำตอบสำหรับ สิ่งที่อยากเห็นในอนาคต
+          เลือก 1 คำตอบสำหรับปัจจุบัน และ 1 คำตอบสำหรับสิ่งที่อยากเห็นในอนาคต
         </div>
 
         <div className="grid gap-6 p-5 md:grid-cols-2 md:gap-0 md:p-8">
@@ -167,7 +167,7 @@ export function SurveyForm({
             step="1"
             tone="current"
             title="สิ่งที่เป็นอยู่ในปัจจุบัน"
-            subtitle="เลือกข้อที่ใกล้เคียงกับสิ่งที่เกิดขึ้นจริงในฝ่ายของคุณมากที่สุด"
+            subtitle="จากประสบการณ์จริง วันนี้ฝ่ายของคุณมักเป็นแบบไหน"
             selected={answer?.currentOptionId}
             options={question.options}
             onSelect={(id) => choose("current", id)}
@@ -180,8 +180,8 @@ export function SurveyForm({
             <ChoicePanel
               step="2"
               tone="desired"
-              title="สิ่งที่อยากเห็นในอนาคต"
-              subtitle="เลือกข้อที่ใกล้เคียงกับสิ่งที่คุณอยากเห็นในฝ่ายของคุณมากที่สุด"
+              title="อนาคตที่อยากเห็น"
+              subtitle="ในอนาคต คุณอยากให้ฝ่ายของคุณเป็นแบบไหน"
               selected={answer?.desiredOptionId}
               options={question.options}
               onSelect={(id) => choose("desired", id)}
