@@ -8,10 +8,10 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     title: "เมื่อมีไอเดียใหม่",
     prompt: "เมื่อมีไอเดียใหม่ แต่ยังไม่รู้ว่าจะได้ผลหรือไม่ ฝ่ายของเราทำอย่างไร",
     options: [
-      { id: "S01-A", label: "ชวนคนที่เกี่ยวข้องมาช่วยกันต่อยอด", archetype: "clan" },
-      { id: "S01-B", label: "ลองก่อนในกลุ่มเล็ก แล้วค่อยขยายผล", archetype: "adhocracy" },
       { id: "S01-C", label: "ดูว่าไอเดียไหนสร้างผลลัพธ์ได้มากที่สุด", archetype: "market" },
+      { id: "S01-A", label: "ชวนคนที่เกี่ยวข้องมาช่วยกันต่อยอด", archetype: "clan" },
       { id: "S01-D", label: "เช็กขั้นตอนให้ชัดก่อนเริ่ม", archetype: "hierarchy" },
+      { id: "S01-B", label: "ลองก่อนในกลุ่มเล็ก แล้วค่อยขยายผล", archetype: "adhocracy" },
     ],
   },
   {
@@ -22,9 +22,9 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     prompt: "มีงานที่ต้องทำร่วมกันหลายฝ่าย ฝ่ายของเราเริ่มต้นอย่างไร",
     options: [
       { id: "S02-A", label: "คุยถึงข้อจำกัดของแต่ละฝ่าย และตกลงว่าจะช่วยกันอย่างไร", archetype: "clan" },
+      { id: "S02-D", label: "กำหนดบทบาท ขั้นตอน และวิธีทำงานร่วมกันให้ชัดก่อนเริ่ม", archetype: "hierarchy" },
       { id: "S02-B", label: "ลองทำก่อน แล้วค่อยปรับไปด้วยกัน", archetype: "adhocracy" },
       { id: "S02-C", label: "ตกลงก่อนว่างานนี้ต้องได้ผลลัพธ์อะไร และใครรับผิดชอบให้สำเร็จ", archetype: "market" },
-      { id: "S02-D", label: "กำหนดบทบาท ขั้นตอน และวิธีทำงานร่วมกันให้ชัดก่อนเริ่ม", archetype: "hierarchy" },
     ],
   },
   {
@@ -34,10 +34,10 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     title: "เมื่อยังไม่มีเจ้าภาพ",
     prompt: "เกิดปัญหาเร่งด่วน แต่ยังไม่ชัดเจนว่าใครต้องรับผิดชอบ ฝ่ายของเราจัดการอย่างไร",
     options: [
-      { id: "S03-A", label: "ช่วยกันรับผิดชอบจนปัญหาจบ", archetype: "clan" },
+      { id: "S03-D", label: "ดูก่อนว่าเป็นหน้าที่ของใคร แล้วทำตามขั้นตอน", archetype: "hierarchy" },
       { id: "S03-B", label: "ลองวิธีที่ทำได้เร็ว แล้วค่อยปรับ", archetype: "adhocracy" },
       { id: "S03-C", label: "ตั้งเจ้าภาพให้ชัด แล้วเร่งให้งานเดินต่อ", archetype: "market" },
-      { id: "S03-D", label: "ดูก่อนว่าเป็นหน้าที่ของใคร แล้วทำตามขั้นตอน", archetype: "hierarchy" },
+      { id: "S03-A", label: "ช่วยกันรับผิดชอบจนปัญหาจบ", archetype: "clan" },
     ],
   },
   {
@@ -47,9 +47,9 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     title: "เมื่อตั้งเป้าหมาย",
     prompt: "เมื่อต้องตั้งเป้าหมายใหม่ ฝ่ายของเราให้ความสำคัญกับเรื่องใด",
     options: [
-      { id: "S04-A", label: "ทุกคนมีส่วนร่วมในการตั้งเป้าหมาย", archetype: "clan" },
       { id: "S04-B", label: "ปรับเป้าหมายได้เมื่อมีข้อมูลใหม่", archetype: "adhocracy" },
       { id: "S04-C", label: "เป้าหมายต้องสร้างผลลัพธ์ที่สำคัญต่อธุรกิจ", archetype: "market" },
+      { id: "S04-A", label: "ทุกคนมีส่วนร่วมในการตั้งเป้าหมาย", archetype: "clan" },
       { id: "S04-D", label: "KPI และวิธีติดตามต้องชัด", archetype: "hierarchy" },
     ],
   },
@@ -60,10 +60,10 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     title: "เมื่อผลไม่เป็นไปตามเป้า",
     prompt: "ทีมลองวิธีใหม่ แต่ผลลัพธ์ไม่เป็นไปตามเป้า ฝ่ายของเราดำเนินการอย่างไร",
     options: [
-      { id: "S05-A", label: "ช่วยกันเรียนรู้และหาทางปรับปรุง", archetype: "clan" },
       { id: "S05-B", label: "ลองแนวทางใหม่จากสิ่งที่ได้เรียนรู้", archetype: "adhocracy" },
-      { id: "S05-C", label: "เร่งแก้ไขให้งานกลับมาตามเป้าหมาย", archetype: "market" },
       { id: "S05-D", label: "หาสาเหตุและปรับขั้นตอนไม่ให้เกิดซ้ำ", archetype: "hierarchy" },
+      { id: "S05-A", label: "ช่วยกันเรียนรู้และหาทางปรับปรุง", archetype: "clan" },
+      { id: "S05-C", label: "เร่งแก้ไขให้งานกลับมาตามเป้าหมาย", archetype: "market" },
     ],
   },
   {
@@ -73,10 +73,10 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     title: "เมื่อเห็นต่างกัน",
     prompt: "คนในทีมมีความคิดเห็นไม่ตรงกัน ฝ่ายของเราจัดการและหาข้อสรุปอย่างไร",
     options: [
-      { id: "S06-A", label: "เปิดให้ทุกฝ่ายคุยจนได้ข้อสรุปร่วมกัน", archetype: "clan" },
-      { id: "S06-B", label: "ลองหลายวิธี แล้วใช้ผลจริงช่วยตัดสิน", archetype: "adhocracy" },
-      { id: "S06-C", label: "ใช้ข้อมูลและเป้าหมายของงานเป็นหลัก", archetype: "market" },
       { id: "S06-D", label: "ให้ผู้รับผิดชอบตามบทบาทเป็นผู้ตัดสิน", archetype: "hierarchy" },
+      { id: "S06-A", label: "เปิดให้ทุกฝ่ายคุยจนได้ข้อสรุปร่วมกัน", archetype: "clan" },
+      { id: "S06-C", label: "ใช้ข้อมูลและเป้าหมายของงานเป็นหลัก", archetype: "market" },
+      { id: "S06-B", label: "ลองหลายวิธี แล้วใช้ผลจริงช่วยตัดสิน", archetype: "adhocracy" },
     ],
   },
   {
@@ -87,8 +87,8 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     prompt: "เมื่อความต้องการหรือเป้าหมายจากองค์กร ผู้บริหาร หรือลูกค้าเปลี่ยนไป ฝ่ายของเราปรับตัวอย่างไร",
     options: [
       { id: "S07-A", label: "ชวนหลายฝ่ายมาช่วยกันหาทางตอบโจทย์", archetype: "clan" },
-      { id: "S07-B", label: "ทดลองแนวทางใหม่ แล้วรีบปรับ", archetype: "adhocracy" },
       { id: "S07-C", label: "ดูโอกาสและผลต่อธุรกิจ", archetype: "market" },
+      { id: "S07-B", label: "ทดลองแนวทางใหม่ แล้วรีบปรับ", archetype: "adhocracy" },
       { id: "S07-D", label: "ทบทวนขั้นตอนก่อนเปลี่ยน", archetype: "hierarchy" },
     ],
   },
@@ -99,10 +99,10 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     title: "เมื่อต้องตัดสินใจเอง",
     prompt: "พนักงานต้องตัดสินใจในเรื่องที่ไม่มีแนวทางชัดเจน ฝ่ายของเราจัดการอย่างไร",
     options: [
-      { id: "S08-A", label: "ปรึกษาผู้เกี่ยวข้องก่อนตัดสินใจ", archetype: "clan" },
-      { id: "S08-B", label: "ลองวิธีที่แก้ไขได้ หากผลไม่เป็นไปตามคาด", archetype: "adhocracy" },
       { id: "S08-C", label: "ตัดสินใจโดยคำนึงถึงผลลัพธ์ของงาน", archetype: "market" },
+      { id: "S08-B", label: "ลองวิธีที่แก้ไขได้ หากผลไม่เป็นไปตามคาด", archetype: "adhocracy" },
       { id: "S08-D", label: "เช็กผู้มีอำนาจหรือกฎก่อนตัดสินใจ", archetype: "hierarchy" },
+      { id: "S08-A", label: "ปรึกษาผู้เกี่ยวข้องก่อนตัดสินใจ", archetype: "clan" },
     ],
   },
   {
@@ -112,10 +112,10 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     title: "เมื่อหัวหน้านำทีม",
     prompt: "ลูกทีมได้รับงานสำคัญ ผู้บังคับบัญชาสูงสุดของฝ่ายมีบทบาทอย่างไร",
     options: [
-      { id: "S09-A", label: "รับฟัง ให้คำแนะนำ และช่วยให้ทีมเติบโต", archetype: "clan" },
-      { id: "S09-B", label: "เปิดโอกาสให้ทีมลองวิธีใหม่และเรียนรู้", archetype: "adhocracy" },
-      { id: "S09-C", label: "ตั้งเป้าหมายและผลักดันให้ทีมทำสำเร็จ", archetype: "market" },
       { id: "S09-D", label: "วางแนวทางและติดตามงานอย่างใกล้ชิด", archetype: "hierarchy" },
+      { id: "S09-C", label: "ตั้งเป้าหมายและผลักดันให้ทีมทำสำเร็จ", archetype: "market" },
+      { id: "S09-B", label: "เปิดโอกาสให้ทีมลองวิธีใหม่และเรียนรู้", archetype: "adhocracy" },
+      { id: "S09-A", label: "รับฟัง ให้คำแนะนำ และช่วยให้ทีมเติบโต", archetype: "clan" },
     ],
   },
   {
@@ -125,9 +125,9 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     title: "เมื่อทรัพยากรมีจำกัด",
     prompt: "เมื่อคน งบประมาณ หรือเวลามีจำกัด ฝ่ายของเราจัดลำดับความสำคัญอย่างไร",
     options: [
-      { id: "S10-A", label: "ช่วยกันแบ่งปันทรัพยากร", archetype: "clan" },
-      { id: "S10-B", label: "กันทรัพยากรไว้ลองสิ่งใหม่", archetype: "adhocracy" },
       { id: "S10-C", label: "เลือกงานที่สร้างผลลัพธ์มากที่สุด", archetype: "market" },
+      { id: "S10-B", label: "กันทรัพยากรไว้ลองสิ่งใหม่", archetype: "adhocracy" },
+      { id: "S10-A", label: "ช่วยกันแบ่งปันทรัพยากร", archetype: "clan" },
       { id: "S10-D", label: "จัดสรรตามแผนและขั้นตอน", archetype: "hierarchy" },
     ],
   },
@@ -138,10 +138,10 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     title: "เมื่อยกย่องคนทำงาน",
     prompt: "คนแบบใดมักได้รับการยอมรับ หรือได้รับโอกาสเติบโตในฝ่ายของเรา",
     options: [
-      { id: "S11-A", label: "คนที่ช่วยทีมและทำให้คนอื่นทำงานได้ดีขึ้น", archetype: "clan" },
       { id: "S11-B", label: "คนที่คิดสิ่งใหม่และกล้าลอง", archetype: "adhocracy" },
-      { id: "S11-C", label: "คนที่สร้างผลงานได้ชัดเจน", archetype: "market" },
+      { id: "S11-A", label: "คนที่ช่วยทีมและทำให้คนอื่นทำงานได้ดีขึ้น", archetype: "clan" },
       { id: "S11-D", label: "คนที่ทำงานถูกต้องและได้มาตรฐาน", archetype: "hierarchy" },
+      { id: "S11-C", label: "คนที่สร้างผลงานได้ชัดเจน", archetype: "market" },
     ],
   },
   {
@@ -152,9 +152,9 @@ export const SCENARIO_QUESTIONS: SurveyQuestion[] = [
     prompt: "เมื่อต้องปรับวิธีทำงานเพื่อรองรับธุรกิจใหม่ ฝ่ายของเราดำเนินการอย่างไร",
     options: [
       { id: "S12-A", label: "ให้หลายฝ่ายช่วยกันออกแบบวิธีทำงาน", archetype: "clan" },
-      { id: "S12-B", label: "ลองใช้กับบางทีมก่อน แล้วค่อยขยาย", archetype: "adhocracy" },
-      { id: "S12-C", label: "ลดขั้นตอนเพื่อให้ได้ผลลัพธ์เร็วขึ้น", archetype: "market" },
       { id: "S12-D", label: "วางขั้นตอนใหม่ให้ชัด แล้วใช้ร่วมกัน", archetype: "hierarchy" },
+      { id: "S12-C", label: "ลดขั้นตอนเพื่อให้ได้ผลลัพธ์เร็วขึ้น", archetype: "market" },
+      { id: "S12-B", label: "ลองใช้กับบางทีมก่อน แล้วค่อยขยาย", archetype: "adhocracy" },
     ],
   },
 ];
