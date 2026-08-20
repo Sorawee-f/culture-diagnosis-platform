@@ -25,7 +25,11 @@ export default async function SurveyPage() {
       <div className="mx-auto mb-8 max-w-6xl">
         <BrandHeader eyebrow="CULTURE DIAGNOSIS" />
       </div>
-      <SurveyExperience employeeName={session.name} />
+      <SurveyExperience
+        employeeName={session.name}
+        employeeId={session.employeeId}
+        surveyVersion={env.SURVEY_VERSION}
+      />
     </main>
   );
 }
