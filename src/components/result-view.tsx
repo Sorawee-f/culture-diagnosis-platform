@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useSyncExternalStore } from "react";
 import { ARCHETYPE_META } from "@/data/archetypes";
 import type { Archetype, SurveySummary } from "@/types";
-import { CheckCircle2, Home } from "lucide-react";
+import { CheckCircle2, LogOut } from "lucide-react";
 
 const subscribe = () => () => undefined;
 
@@ -27,7 +26,7 @@ export function ResultView({ initialSummary = null }: { initialSummary?: SurveyS
     return (
       <div className="card p-8 text-center">
         <p>ไม่พบผลสรุปใน Browser นี้</p>
-        <Link className="mt-4 inline-block text-emerald-700 underline" href="/">กลับหน้าแรก</Link>
+        <a className="mt-4 inline-block text-emerald-700 underline" href="/api/auth/employee/logout">ออกจากระบบและกลับหน้าแรก</a>
       </div>
     );
   }
@@ -42,13 +41,13 @@ export function ResultView({ initialSummary = null }: { initialSummary?: SurveyS
 
       <div className="grid gap-5 lg:grid-cols-2">
         <TopResultCard
-          label="CURRENT — ปัจจุบัน"
+          label="ปัจจุบัน"
           sentence="ปัจจุบันคุณมองฝ่ายของคุณเป็น"
           top={summary.currentTop}
           tone="current"
         />
         <TopResultCard
-          label="DESIRED — ความคาดหวัง"
+          label="สิ่งที่อยากเห็นในอนาคต"
           sentence="สิ่งที่คุณอยากเห็นในอนาคตคือ"
           top={summary.desiredTop}
           tone="desired"
@@ -62,9 +61,12 @@ export function ResultView({ initialSummary = null }: { initialSummary?: SurveyS
         </p>
       </div>
 
-      <Link href="/" className="focus-ring inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-medium">
-        <Home size={18} /> กลับหน้าแรก
-      </Link>
+      <a
+        href="/api/auth/employee/logout"
+        className="focus-ring inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 font-medium text-white"
+      >
+        <LogOut size={18} /> เสร็จสิ้นและออกจากระบบ
+      </a>
     </div>
   );
 }

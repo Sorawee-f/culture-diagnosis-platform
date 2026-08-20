@@ -15,15 +15,20 @@ import type { SurveyAnswer, SurveyType } from "@/types";
 
 export function SurveyForm({
   employeeName,
+  employeeId,
+  surveyVersion,
   surveyType,
 }: {
   employeeName: string;
+  employeeId: string;
+  surveyVersion: string;
   surveyType: SurveyType;
 }) {
   const router = useRouter();
   const definition = getSurveyDefinition(surveyType);
   const questions = definition.questions;
   const startedAt = useRef(0);
+  const draftKey = `culture-survey-draft-${surveyVersion}-${employeeId}-${surveyType}`;
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, SurveyAnswer>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -31,21 +36,23 @@ export function SurveyForm({
 
   useEffect(() => {
     startedAt.current = Date.now();
-    const saved = sessionStorage.getItem(`culture-survey-draft-${surveyType}`);
+    // Remove the old shared draft key from pre-production builds to prevent cross-user reuse.
+    sessionStorage.removeItem(`culture-survey-draft-${surveyType}`);
+    const saved = sessionStorage.getItem(draftKey);
     if (saved) {
       try {
         setAnswers(JSON.parse(saved));
       } catch {
-        sessionStorage.removeItem(`culture-survey-draft-${surveyType}`);
+        sessionStorage.removeItem(draftKey);
       }
     }
-  }, [surveyType]);
+  }, [draftKey, surveyType]);
 
   useEffect(() => {
     if (Object.keys(answers).length) {
-      sessionStorage.setItem(`culture-survey-draft-${surveyType}`, JSON.stringify(answers));
+      sessionStorage.setItem(draftKey, JSON.stringify(answers));
     }
-  }, [answers, surveyType]);
+  }, [answers, draftKey]);
 
   const question = questions[index];
   const answer = answers[question.id];
@@ -110,9 +117,8 @@ export function SurveyForm({
         throw new Error(data.message ?? "ส่งแบบสำรวจไม่สำเร็จ");
       }
       sessionStorage.setItem("culture-survey-result", JSON.stringify(data.summary));
-      sessionStorage.removeItem(`culture-survey-draft-${surveyType}`);
-      router.push("/result");
-      router.refresh();
+      sessionStorage.removeItem(draftKey);
+      router.replace("/result");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "เกิดข้อผิดพลาด");
     } finally {
@@ -167,7 +173,7 @@ export function SurveyForm({
             step="1"
             tone="current"
             title="สิ่งที่เป็นอยู่ในปัจจุบัน"
-            subtitle="จากประสบการณ์จริง วันนี้ฝ่ายของคุณมักเป็นแบบไหน"
+            subtitle="เลือกข้อที่ใกล้เคียงกับสิ่งที่เกิดขึ้นจริงในฝ่ายของคุณมากที่สุด"
             selected={answer?.currentOptionId}
             options={question.options}
             onSelect={(id) => choose("current", id)}
@@ -181,7 +187,7 @@ export function SurveyForm({
               step="2"
               tone="desired"
               title="อนาคตที่อยากเห็น"
-              subtitle="ในอนาคต คุณอยากให้ฝ่ายของคุณเป็นแบบไหน"
+              subtitle="เลือกข้อที่ใกล้เคียงกับสิ่งที่คุณอยากเห็นในฝ่ายของคุณมากที่สุด"
               selected={answer?.desiredOptionId}
               options={question.options}
               onSelect={(id) => choose("desired", id)}

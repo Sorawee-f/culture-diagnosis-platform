@@ -6,7 +6,15 @@ import { SurveyForm } from "@/components/survey-form";
 
 const INTRO_KEY = "culture-survey-intro-accepted";
 
-export function SurveyExperience({ employeeName }: { employeeName: string }) {
+export function SurveyExperience({
+  employeeName,
+  employeeId,
+  surveyVersion,
+}: {
+  employeeName: string;
+  employeeId: string;
+  surveyVersion: string;
+}) {
   const [ready, setReady] = useState(false);
   const [accepted, setAccepted] = useState(false);
 
@@ -24,7 +32,12 @@ export function SurveyExperience({ employeeName }: { employeeName: string }) {
 
   return (
     <>
-      <SurveyForm employeeName={employeeName} surveyType="scenario" />
+      <SurveyForm
+        employeeName={employeeName}
+        employeeId={employeeId}
+        surveyVersion={surveyVersion}
+        surveyType="scenario"
+      />
       {!accepted && <SurveyIntroModal onAccept={accept} />}
     </>
   );
@@ -83,13 +96,13 @@ function SurveyIntroModal({ onAccept }: { onAccept: () => void }) {
             <p className="mt-2">ในแต่ละสถานการณ์ ให้ตอบ 2 มุมมอง ได้แก่</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4">
-                <div className="font-bold text-blue-950">1. Current — ปัจจุบันเป็นอย่างไร</div>
+                <div className="font-bold text-blue-950">1. ปัจจุบัน — สิ่งที่เป็นอยู่ในปัจจุบัน</div>
                 <p className="mt-1 text-sm leading-6 text-blue-900">
                   เลือกคำตอบที่ใกล้เคียงกับ “สิ่งที่เกิดขึ้นจริงในฝ่ายของคุณมากที่สุด”
                 </p>
               </div>
               <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-                <div className="font-bold text-emerald-950">2. Desired — อยากให้เป็นอย่างไร</div>
+                <div className="font-bold text-emerald-950">2. อนาคต — สิ่งที่อยากเห็นในอนาคต</div>
                 <p className="mt-1 text-sm leading-6 text-emerald-900">
                   เลือกคำตอบที่ใกล้เคียงกับ “วิธีการทำงานที่คุณอยากเห็นในฝ่ายของคุณในอนาคตมากที่สุด”
                 </p>

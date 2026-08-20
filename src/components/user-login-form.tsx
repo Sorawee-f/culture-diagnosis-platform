@@ -24,8 +24,7 @@ export function UserLoginForm() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.message ?? "เข้าสู่ระบบไม่สำเร็จ");
       sessionStorage.removeItem("culture-survey-intro-accepted");
-      router.push("/survey");
-      router.refresh();
+      router.replace("/survey");
     } catch (err) {
       setError(err instanceof Error ? err.message : "เกิดข้อผิดพลาด");
     } finally {
