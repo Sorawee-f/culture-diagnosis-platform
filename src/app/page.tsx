@@ -23,9 +23,9 @@ export default function HomePage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              [CheckCircle2, "12 สถานการณ์", "ตอบทั้ง Current และ Desired ในแต่ละข้อ"],
+              [CheckCircle2, "12 สถานการณ์", "ตอบทั้งสิ่งที่เป็นอยู่ในปัจจุบัน และสิ่งที่อยากเห็นในอนาคต"],
               [Smartphone, "รองรับมือถือ", "ออกแบบให้ตอบได้สะดวกทั้งมือถือและคอมพิวเตอร์"],
-              [BarChart3, "สรุปผลหลังตอบ", "ดูรูปแบบ Current และ Desired ที่เด่นที่สุดจากคำตอบของคุณ"],
+              [BarChart3, "สรุปผลหลังตอบ", "ดูรูปแบบปัจจุบันและสิ่งที่อยากเห็นในอนาคตที่เด่นที่สุดจากคำตอบของคุณ"],
             ].map(([Icon, titleText, detail]) => {
               const I = Icon as typeof CheckCircle2;
               return (
