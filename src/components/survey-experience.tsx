@@ -88,7 +88,7 @@ function SurveyIntroModal({ onAccept }: { onAccept: () => void }) {
           </div>
 
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-950">
-            <span className="font-bold">กลุ่มเป้าหมาย:</span> พนักงานอายุงาน 1 ปีขึ้นไป
+            <span className="font-bold">กลุ่มเป้าหมาย:</span> พนักงานอายุงาน 6 เดือนขึ้นไป
           </div>
 
           <div>
