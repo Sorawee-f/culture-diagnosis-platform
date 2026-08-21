@@ -35,7 +35,7 @@ export function UserLoginForm() {
   return (
     <form onSubmit={submit} className="space-y-5">
       <div>
-        <label className="mb-2 block text-sm font-medium">รหัสพนักงาน</label>
+        <label className="mb-2 block text-sm font-medium">รหัสพนักงาน 6 หลัก</label>
         <input
           required
           inputMode="numeric"
