@@ -43,11 +43,11 @@ export function UserLoginForm() {
           value={employeeId}
           onChange={(e) => setEmployeeId(e.target.value.trim())}
           className="focus-ring w-full rounded-xl border border-slate-200 bg-white px-4 py-3"
-          placeholder="กรอกรหัสพนักงาน"
+          placeholder="กรอกรหัสพนักงาน 6 หลัก"
         />
       </div>
       <div>
-        <label className="mb-2 block text-sm font-medium">รหัสผ่าน</label>
+        <label className="mb-2 block text-sm font-medium">รหัสผ่าน 6 หลัก</label>
         <input
           required
           type="password"
@@ -57,7 +57,7 @@ export function UserLoginForm() {
           className="focus-ring w-full rounded-xl border border-slate-200 bg-white px-4 py-3"
           placeholder="พิมพ์รหัสพนักงานอีกครั้ง"
         />
-        <p className="mt-2 text-xs text-slate-500">รหัสผ่านตั้งต้นคือรหัสพนักงานของคุณ</p>
+        <p className="mt-2 text-xs text-slate-500">รหัสผ่าน (Password) ตั้งต้นคือรหัสพนักงานของคุณ</p>
       </div>
       {error && <div className="rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
       <button disabled={loading} className="focus-ring flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60">
